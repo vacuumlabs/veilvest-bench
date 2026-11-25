@@ -1,0 +1,23 @@
+[package]
+name = "vesting-guest"
+version = "0.0.1"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+publish = false
+
+[workspace]
+
+[profile.release]
+debug = 0
+strip = "symbols"
+
+[[bin]]
+name = "vesting"
+path = "src/bin/vesting.rs"
+
+[dependencies]
+lee_core = { git = "https://github.com/logos-blockchain/logos-execution-zone.git", tag = "v0.4.0-rc3" }
+risc0-zkvm = { version = "=3.0.5", default-features = false }
+# risc0's guest toolchain is older than ruint 1.18's MSRV, as in lez-programs.
+ruint = { version = "=1.17.0", default-features = false }
+vesting_program = { path = "../../program" }

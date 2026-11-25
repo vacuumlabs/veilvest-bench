@@ -1,0 +1,12 @@
+[package]
+name = "vesting_program"
+version = "0.0.1"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+publish = false
+
+[dependencies]
+lee_core = { git = "https://github.com/logos-blockchain/logos-execution-zone.git", tag = "v0.4.0-rc3" }
+token_core = { git = "https://github.com/logos-blockchain/lez-programs.git", rev = "3f04cc37ec5f90358e606b0fe7d28baa6b1dbd7e" }
+vesting_core = { path = "../core" }
+borsh = { version = "1.5", features = ["derive"] }

@@ -1,0 +1,18 @@
+2026-11-24, RISC Zero 3.0.5, CPU prover, RISC0_DEV_MODE unset, one run
+AMD Ryzen 7 9800X3D (8 cores, 16 threads), WSL2 with 15 GB of memory
+
+test real_proofs ... first claim, opening the holding: 264 s, 228613 bytes
+later claim: 215 s, 227397 bytes
+ok
+test result: ok. 1 passed; 0 failed; finished in 478.71s
+
+/usr/bin/time -v, whole run:
+User time (seconds): 6706.49
+Percent of CPU this job got: 1411%
+Elapsed (wall clock) time: 7:58.59
+Maximum resident set size (kbytes): 9605312
+
+The run precedes later changes to the vesting program: the refund of a cancel, the limit on how far
+ahead it may split, the check of the creator's address, and the numbering of the error codes. The
+vesting program is not in the proof, which covers the token program's credit and LEZ's privacy
+circuit.

@@ -1,0 +1,445 @@
+{
+  "version": "2",
+  "name": "vesting",
+  "messages": [
+    {
+      "name": "CreateBatch",
+      "tag": 0,
+      "fields": [
+        {
+          "name": "token",
+          "type": "account_id"
+        },
+        {
+          "name": "source",
+          "type": "account_id",
+          "docs": "The holding that funds the batch; it must authorise too."
+        },
+        {
+          "name": "schedules",
+          "type": {
+            "vec": {
+              "defined": "ScheduleSpec"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Claim",
+      "tag": 1,
+      "fields": [
+        {
+          "name": "schedule",
+          "type": "account_id"
+        },
+        {
+          "name": "amount",
+          "type": "u128"
+        },
+        {
+          "name": "as_of",
+          "type": "u64"
+        },
+        {
+          "name": "to",
+          "type": "account_id"
+        },
+        {
+          "name": "open_holding",
+          "type": {
+            "option": "account_id"
+          },
+          "docs": "`Some(token)` creates the destination holding first."
+        }
+      ]
+    },
+    {
+      "name": "Cancel",
+      "tag": 2,
+      "fields": [
+        {
+          "name": "schedule",
+          "type": "account_id"
+        },
+        {
+          "name": "until",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "MakeNonCancelable",
+      "tag": 3,
+      "fields": [
+        {
+          "name": "schedule",
+          "type": "account_id"
+        }
+      ]
+    },
+    {
+      "name": "SignalMilestone",
+      "tag": 4,
+      "fields": [
+        {
+          "name": "schedule",
+          "type": "account_id"
+        },
+        {
+          "name": "index",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "TransferBeneficiary",
+      "tag": 5,
+      "fields": [
+        {
+          "name": "schedule",
+          "type": "account_id"
+        },
+        {
+          "name": "to",
+          "type": "account_id"
+        }
+      ]
+    }
+  ],
+  "state_types": [
+    "Schedule",
+    "CreatorState"
+  ],
+  "events": [
+    {
+      "name": "Created",
+      "selector": "ff55b26d55f2793a",
+      "type": {
+        "defined": "Created"
+      }
+    },
+    {
+      "name": "Claimed",
+      "selector": "aa25b4641ce8cb29",
+      "type": {
+        "defined": "Claimed"
+      }
+    },
+    {
+      "name": "Cancelled",
+      "selector": "fee82a2f47263d1f",
+      "type": {
+        "defined": "Cancelled"
+      }
+    },
+    {
+      "name": "MilestoneSignalled",
+      "selector": "0882439381b3eec9",
+      "type": {
+        "defined": "MilestoneSignalled"
+      }
+    },
+    {
+      "name": "BeneficiaryTransferred",
+      "selector": "3edd69d43332bdb2",
+      "type": {
+        "defined": "BeneficiaryTransferred"
+      }
+    },
+    {
+      "name": "MadeNonCancelable",
+      "selector": "947bede70fe02f82",
+      "type": {
+        "defined": "MadeNonCancelable"
+      }
+    }
+  ],
+  "types": [
+    {
+      "name": "BeneficiaryTransferred",
+      "kind": "struct",
+      "fields": [
+        {
+          "name": "schedule",
+          "type": "account_id"
+        },
+        {
+          "name": "old",
+          "type": "account_id"
+        },
+        {
+          "name": "new",
+          "type": "account_id"
+        }
+      ]
+    },
+    {
+      "name": "Cancelled",
+      "kind": "struct",
+      "fields": [
+        {
+          "name": "schedule",
+          "type": "account_id"
+        },
+        {
+          "name": "by",
+          "type": "account_id"
+        },
+        {
+          "name": "until",
+          "type": "u64"
+        },
+        {
+          "name": "vested",
+          "type": "u128"
+        },
+        {
+          "name": "refunded",
+          "type": "u128"
+        }
+      ]
+    },
+    {
+      "name": "Claimed",
+      "kind": "struct",
+      "fields": [
+        {
+          "name": "schedule",
+          "type": "account_id"
+        },
+        {
+          "name": "beneficiary",
+          "type": "account_id"
+        },
+        {
+          "name": "amount",
+          "type": "u128"
+        },
+        {
+          "name": "as_of",
+          "type": "u64"
+        },
+        {
+          "name": "claimed",
+          "type": "u128"
+        }
+      ]
+    },
+    {
+      "name": "Created",
+      "kind": "struct",
+      "fields": [
+        {
+          "name": "schedule",
+          "type": "account_id"
+        },
+        {
+          "name": "creator",
+          "type": "account_id"
+        },
+        {
+          "name": "batch",
+          "type": "u64"
+        },
+        {
+          "name": "spec",
+          "type": {
+            "defined": "ScheduleSpec"
+          }
+        }
+      ]
+    },
+    {
+      "name": "CreatorState",
+      "kind": "struct",
+      "fields": [
+        {
+          "name": "next_batch",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "MadeNonCancelable",
+      "kind": "struct",
+      "fields": [
+        {
+          "name": "schedule",
+          "type": "account_id"
+        }
+      ]
+    },
+    {
+      "name": "MilestoneSignalled",
+      "kind": "struct",
+      "fields": [
+        {
+          "name": "schedule",
+          "type": "account_id"
+        },
+        {
+          "name": "index",
+          "type": "u8"
+        },
+        {
+          "name": "amount",
+          "type": "u128"
+        }
+      ]
+    },
+    {
+      "name": "Schedule",
+      "kind": "struct",
+      "fields": [
+        {
+          "name": "creator",
+          "type": "account_id"
+        },
+        {
+          "name": "batch",
+          "type": "u64"
+        },
+        {
+          "name": "beneficiary",
+          "type": "account_id"
+        },
+        {
+          "name": "source",
+          "type": "account_id",
+          "docs": "The holding that funded the batch; refunds go back to it."
+        },
+        {
+          "name": "total",
+          "type": "u128"
+        },
+        {
+          "name": "claimed",
+          "type": "u128"
+        },
+        {
+          "name": "shape",
+          "type": {
+            "defined": "Shape"
+          }
+        },
+        {
+          "name": "cancelable",
+          "type": "bool"
+        },
+        {
+          "name": "transferable",
+          "type": "bool"
+        },
+        {
+          "name": "cancel_authority",
+          "type": "account_id"
+        },
+        {
+          "name": "milestone_authority",
+          "type": "account_id"
+        },
+        {
+          "name": "cancelled_at",
+          "type": {
+            "option": "u64"
+          },
+          "docs": "The time a cancel split at."
+        }
+      ]
+    },
+    {
+      "name": "ScheduleSpec",
+      "kind": "struct",
+      "fields": [
+        {
+          "name": "beneficiary",
+          "type": "account_id"
+        },
+        {
+          "name": "total",
+          "type": "u128"
+        },
+        {
+          "name": "shape",
+          "type": {
+            "defined": "Shape"
+          }
+        },
+        {
+          "name": "cancelable",
+          "type": "bool"
+        },
+        {
+          "name": "transferable",
+          "type": "bool"
+        },
+        {
+          "name": "cancel_authority",
+          "type": {
+            "option": "account_id"
+          },
+          "docs": "`None` is the creator."
+        },
+        {
+          "name": "milestone_authority",
+          "type": {
+            "option": "account_id"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Shape",
+      "kind": "enum",
+      "variants": [
+        {
+          "name": "Linear",
+          "fields": [
+            {
+              "name": "start",
+              "type": "u64"
+            },
+            {
+              "name": "end",
+              "type": "u64"
+            }
+          ]
+        },
+        {
+          "name": "CliffLinear",
+          "fields": [
+            {
+              "name": "start",
+              "type": "u64"
+            },
+            {
+              "name": "cliff",
+              "type": "u64"
+            },
+            {
+              "name": "end",
+              "type": "u64"
+            }
+          ]
+        },
+        {
+          "name": "Milestones",
+          "fields": [
+            {
+              "name": "tranches",
+              "type": {
+                "vec": "u128"
+              }
+            },
+            {
+              "name": "signalled",
+              "type": "u64",
+              "docs": "Bit `i` is tranche `i`."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

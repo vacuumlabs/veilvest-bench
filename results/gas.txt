@@ -1,0 +1,67 @@
+2026-11-25, LEZ v0.4.0-rc3, token program 3f04cc3, RISC Zero 3.0.5
+RISC0_DEV_MODE=1 cargo test -q -p vesting_tests --test gas -- --ignored --nocapture --test-threads 1
+
+running 2 tests
+
+linear
+    1      93983 cycles      903 bytes
+    8     252481 cycles     1834 bytes
+   16     433910 cycles     2898 bytes
+   32     799732 cycles     5026 bytes
+   64    1531095 cycles     9282 bytes
+  128    2993604 cycles    17794 bytes
+max 434 (9976914 cycles, 58492 bytes); 435 does not fit
+
+cliff + linear
+    1      94629 cycles      911 bytes
+    8     255929 cycles     1898 bytes
+   16     440806 cycles     3026 bytes
+   32     813541 cycles     5282 bytes
+   64    1558696 cycles     9794 bytes
+  128    3048853 cycles    18818 bytes
+max 426 (9980356 cycles, 60836 bytes); 427 does not fit
+
+milestones, 4 tranches
+    1      96310 cycles      963 bytes
+    8     271039 cycles     2314 bytes
+   16     470979 cycles     3858 bytes
+   32     873870 cycles     6946 bytes
+   64    1679371 cycles    13122 bytes
+  128    3290156 cycles    25474 bytes
+max 396 (9990273 cycles, 77198 bytes); 397 does not fit
+
+milestones, 20 tranches
+    1     105000 cycles     1219 bytes
+    8     339817 cycles     4362 bytes
+   16     608552 cycles     7954 bytes
+   32    1149001 cycles    15138 bytes
+   64    2229646 cycles    29506 bytes
+  128    4390744 cycles    58242 bytes
+max 294 (9983858 cycles, 132776 bytes); 295 does not fit
+
+linear, both roles named
+    1      96867 cycles      967 bytes
+    8     275425 cycles     2346 bytes
+   16     479751 cycles     3922 bytes
+   32     891414 cycles     7074 bytes
+   64    1714459 cycles    13378 bytes
+  128    3360366 cycles    25986 bytes
+max 386 (9953658 cycles, 76812 bytes); 387 does not fit
+.
+limit: 10000000
+
+create, 1 schedule, linear                        93983 cycles      903 bytes
+create, 1 schedule, cliff + linear                94629 cycles      911 bytes
+create, 1 schedule, milestones, 4 tranches        96310 cycles      963 bytes
+create, 1 schedule, milestones, 20 tranches      105000 cycles     1219 bytes
+claim to public, opening the holding              92344 cycles      711 bytes
+claim to public, linear                           59116 cycles      615 bytes
+claim to public, cliff + linear                   59428 cycles      615 bytes
+cancel, nothing to refund                         27037 cycles      566 bytes
+cancel with refund                                57866 cycles      566 bytes
+signal milestone                                  27489 cycles      431 bytes
+make non-cancelable                               26148 cycles      430 bytes
+transfer beneficiary                              27715 cycles      462 bytes
+.
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 681.01s
+
